@@ -1,9 +1,18 @@
 using Scalar.AspNetCore; // Necessário para usar o MapScalarApiReference()
-using dotenv.net; // Necessário para usar o DotEnv.Load()
+using dotenv.net;
+using ControleDeGastosAPI.DBContext;
+using Microsoft.EntityFrameworkCore; // Necessário para usar o DotEnv.Load()
 
 DotEnv.Load(); // Carrega as variáveis de ambiente do arquivo .env
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING"); // Obtém a string de conexão do banco de dados
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Registrando o ContextAPI
+builder.Services.AddDbContext<ContextAPI>(options =>
+{
+    options.UseNpgsql(connectionString);
+});
 
 // Add services to the container.
 
