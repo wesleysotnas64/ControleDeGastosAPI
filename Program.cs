@@ -17,6 +17,7 @@ builder.Services.AddDbContext<ContextAPI>(options =>
 
 // Add services to the container.
 builder.Services.AddScoped<PersonService>();
+builder.Services.AddScoped<CategoryService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
