@@ -22,4 +22,12 @@ public class CategoryController : ControllerBase
 
         return CreatedAtAction(nameof(Create), new {id = result.Id }, result);
     }
+
+    [HttpGet("get-all")]
+    public async Task<ActionResult<List<CategoryResponseDTO>>> GetAll()
+    {
+        var result = await _categoryService.GetAllCategoryAsync();
+
+        return Ok(result);
+    }
 }

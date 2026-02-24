@@ -1,6 +1,7 @@
 ﻿using ControleDeGastosAPI.DBContext;
 using ControleDeGastosAPI.DTOs.CategoryDTO;
 using ControleDeGastosAPI.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControleDeGastosAPI.Services
 {
@@ -30,6 +31,18 @@ namespace ControleDeGastosAPI.Services
                 Description = category.Description,
                 Purpose = category.Purpose,
             };
+        }
+
+        public async Task<List<CategoryResponseDTO>> GetAllCategoryAsync()
+        {
+            var categories = await _context.Categories.ToListAsync();
+
+            return categories.Select(c => new CategoryResponseDTO
+            {
+                Id = c.Id,
+                Description = c.Description,
+                Purpose = c.Purpose,
+            }).ToList();
         }
     }
 }
