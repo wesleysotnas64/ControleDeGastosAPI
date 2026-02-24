@@ -18,6 +18,7 @@ builder.Services.AddDbContext<ContextAPI>(options =>
 // Add services to the container.
 builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<TransactionService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -26,11 +27,11 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.MapOpenApi();
     app.MapScalarApiReference(); //Para visualizar os endpoints
-}
+//}
 
 app.UseHttpsRedirection();
 

@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-using ControleDeGastosAPI.Enums;
+﻿using ControleDeGastosAPI.Enums;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ControleDeGastosAPI.Entities;
 
 public class Category
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
     [Required]
     [MaxLength(400)]

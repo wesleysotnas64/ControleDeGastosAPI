@@ -44,6 +44,20 @@ public class PersonService
         }).ToList();
     }
 
+    public async Task<PersonResponseDTO> GetPersonByIdAsync(Guid id)
+    {
+        var person = await _context.People.FindAsync(id);
+
+        if (person == null) return null;
+
+        return new PersonResponseDTO
+        {
+            Id = person.Id,
+            Name = person.Name,
+            Age = person.Age,
+        };
+    }
+
     public async Task<PersonResponseDTO?> UpdatePersonAsync(Guid id, PersonUpdateDTO personUpdateDTO)
     {
         var person = await _context.People.FindAsync(id);

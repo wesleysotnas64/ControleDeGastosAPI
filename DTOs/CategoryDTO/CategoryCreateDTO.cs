@@ -1,6 +1,5 @@
-﻿namespace ControleDeGastosAPI.DTOs.CategoryDTO
+﻿namespace ControleDeGastosAPI.DTOs.CategoryDTO;
+
+public class CategoryCreateDTO : CategoryBaseDTO
 {
-    public class CategoryCreateDTO : CategoryBaseDTO
-    {
-    }
 }

@@ -1,7 +1,6 @@
-﻿namespace ControleDeGastosAPI.DTOs.CategoryDTO
+﻿namespace ControleDeGastosAPI.DTOs.CategoryDTO;
+
+public class CategoryResponseDTO : CategoryBaseDTO
 {
-    public class CategoryResponseDTO : CategoryBaseDTO
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }

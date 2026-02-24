@@ -10,6 +10,7 @@ public class ContextAPI : DbContext
     }
     public DbSet<Person> People { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

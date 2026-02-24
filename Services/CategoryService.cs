@@ -44,5 +44,18 @@ namespace ControleDeGastosAPI.Services
                 Purpose = c.Purpose,
             }).ToList();
         }
+
+        public async Task<CategoryResponseDTO> GetCategoryByIdAsync(Guid id)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null) return null;
+
+            return new CategoryResponseDTO
+            {
+                Id = category.Id,
+                Description = category.Description,
+                Purpose = category.Purpose,
+            };
+        }
     }
 }
