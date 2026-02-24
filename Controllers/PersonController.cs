@@ -41,4 +41,17 @@ public class PersonController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpDelete("delete/{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var result = await _personService.DeletePersonAsync(id);
+
+        if (!result)
+        {
+            return NotFound(new {message = "Pessoa não encontrada."});
+        }
+
+        return NoContent();
+    }
 }

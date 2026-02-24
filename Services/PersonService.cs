@@ -62,4 +62,17 @@ public class PersonService
             Age = person.Age
         };
     }
+
+    public async Task<bool> DeletePersonAsync(Guid id)
+    {
+        var person = await _context.People.FindAsync(id);
+
+        // Se a pessoa não for encontrada, retorna false
+        if (person == null) return false;
+
+        // Caso contrário, remove a pessoa e salva as mudanças
+        _context.People.Remove(person);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }
