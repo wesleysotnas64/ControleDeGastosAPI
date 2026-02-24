@@ -43,4 +43,23 @@ public class PersonService
             Age = p.Age
         }).ToList();
     }
+
+    public async Task<PersonResponseDTO?> UpdatePersonAsync(Guid id, PersonUpdateDTO personUpdateDTO)
+    {
+        var person = await _context.People.FindAsync(id);
+
+        if (person == null) return null;
+
+        person.Name = personUpdateDTO.Name;
+        person.Age = personUpdateDTO.Age;
+
+        await _context.SaveChangesAsync();
+
+        return new PersonResponseDTO
+        {
+            Id = person.Id,
+            Name = person.Name,
+            Age = person.Age
+        };
+    }
 }

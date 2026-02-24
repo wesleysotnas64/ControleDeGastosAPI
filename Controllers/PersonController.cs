@@ -28,4 +28,17 @@ public class PersonController : ControllerBase
         var result = await _personService.GetAllPeopleAsync();
         return Ok(result);
     }
+
+    [HttpPut("update/{id}")]
+    public async Task<ActionResult<PersonResponseDTO>> Update(Guid id, [FromBody] PersonUpdateDTO personUpdateDTO)
+    {
+        var result = await _personService.UpdatePersonAsync(id, personUpdateDTO);
+
+        if (result == null)
+        {
+            return NotFound(new {mwssage = "Pessoa não encontrada."});
+        }
+
+        return Ok(result);
+    }
 }
