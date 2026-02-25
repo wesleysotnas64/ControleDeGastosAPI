@@ -18,9 +18,7 @@ public abstract class TransactionBaseDTO
 
     [Required(ErrorMessage = "O ID da pessoa é obrigatório")]
     public Guid PersonId { get; set; }
-    public string? PersonName { get; set; }
 
     [Required(ErrorMessage = "O ID da categoria é obrigatório")]
     public Guid CategoryId { get; set; }
-    public string? CategoryDescription { get; set; }
 }
