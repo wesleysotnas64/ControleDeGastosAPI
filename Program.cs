@@ -19,6 +19,7 @@ builder.Services.AddDbContext<ContextAPI>(options =>
 builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<TransactionService>();
+builder.Services.AddScoped<DashboardService>();
 
 //Para evitar erro de CORS (Cross-Origin Resource Sharing)
 builder.Services.AddCors(options =>
