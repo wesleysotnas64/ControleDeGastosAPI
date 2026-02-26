@@ -1,4 +1,5 @@
 ﻿using ControleDeGastosAPI.DBContext;
+using ControleDeGastosAPI.DTOs.CategoryDTO;
 using ControleDeGastosAPI.DTOs.DashboardDTO;
 using ControleDeGastosAPI.DTOs.PersonDTO;
 using ControleDeGastosAPI.Enums;
@@ -56,6 +57,50 @@ public class DashboardService
             GrandTotalExpense = peopleTotals.Sum(p => p.TotalExpense)
         };
 
+        summary.GrandBalance = summary.GrandTotalIncome - summary.GrandTotalExpense;
+
+        return summary;
+    }
+
+    public async Task<DashboardCategorySummaryDTO> GetCategorySummaryAsync()
+    {
+        // Busca todas as categorias e calcula os totais de transações para cada uma
+        var categoryTotals = await _context.Categories
+            .Select(c => new DashboardCategoryTotalDTO
+            {
+                Category = new CategoryResponseDTO
+                {
+                    Id = c.Id,
+                    Description = c.Description,
+                    Purpose = c.Purpose
+                },
+                // Soma transações do tipo Receita vinculadas a esta categoria
+                TotalIncome = _context.Transactions
+                    .Where(t => t.CategoryId == c.Id && t.Type == CategoryEnums.Income)
+                    .Sum(t => (decimal?)t.Value) ?? 0,
+
+                // Soma transações do tipo Despesa vinculadas a esta categoria
+                TotalExpense = _context.Transactions
+                    .Where(t => t.CategoryId == c.Id && t.Type == CategoryEnums.Expense)
+                    .Sum(t => (decimal?)t.Value) ?? 0
+            })
+            .ToListAsync();
+
+        // Calcula o Saldo individual de cada categoria
+        foreach (var category in categoryTotals)
+        {
+            category.Balance = category.TotalIncome - category.TotalExpense;
+        }
+
+        // Monta o DTO
+        var summary = new DashboardCategorySummaryDTO
+        {
+            CategoryTotals = categoryTotals,
+            GrandTotalIncome = categoryTotals.Sum(c => c.TotalIncome),
+            GrandTotalExpense = categoryTotals.Sum(c => c.TotalExpense)
+        };
+
+        // O Saldo Líquido Geral
         summary.GrandBalance = summary.GrandTotalIncome - summary.GrandTotalExpense;
 
         return summary;

@@ -28,4 +28,18 @@ public class DashboardController : ControllerBase
             return StatusCode(500, $"Erro interno ao processar o dashboard: {ex.Message}");
         }
     }
+
+    [HttpGet("totals-by-category")]
+    public async Task<ActionResult<DashboardCategorySummaryDTO>> TotalsByCategory()
+    {
+        try
+        {
+            var result = await _dashboardService.GetCategorySummaryAsync();
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Erro ao processar totais por categoria: {ex.Message}");
+        }
+    }
 }
