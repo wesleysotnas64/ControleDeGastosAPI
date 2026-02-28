@@ -1,6 +1,7 @@
 ﻿using ControleDeGastosAPI.DBContext;
 using ControleDeGastosAPI.DTOs.PersonDTO;
 using ControleDeGastosAPI.Entities;
+using ControleDeGastosAPI.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControleDeGastosAPI.Services;
@@ -63,6 +64,23 @@ public class PersonService
         var person = await _context.People.FindAsync(id);
 
         if (person == null) return null;
+
+        // CORREÇÃO DE BUG
+        // Verifica se a idade vai ser menor que 18.
+        // Se sim, verifica se a pessoa tem transações de receita.
+        // Se a a pessoa tiver transações de receita, não permite a atualização.
+        // Lança uma exeção:
+        // mensagem de erro: "Não é permitido atualizar a idade para menor de 18 anos, pois a pessoa possui transações de receita."
+        if (personUpdateDTO.Age < 18)
+        {
+            var hasIncomeTransactions = await _context.Transactions
+                .AnyAsync(t => t.PersonId == id && t.Type == CategoryEnums.Income);
+
+            if (hasIncomeTransactions)
+            {
+                throw new Exception("Não é permitido atualizar a idade para menor de 18 anos, pois a pessoa possui transações de receita.");
+            }
+        }
 
         person.Name = personUpdateDTO.Name;
         person.Age = personUpdateDTO.Age;

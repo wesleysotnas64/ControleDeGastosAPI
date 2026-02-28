@@ -32,14 +32,21 @@ public class PersonController : ControllerBase
     [HttpPut("update/{id}")]
     public async Task<ActionResult<PersonResponseDTO>> Update(Guid id, [FromBody] PersonUpdateDTO personUpdateDTO)
     {
-        var result = await _personService.UpdatePersonAsync(id, personUpdateDTO);
-
-        if (result == null)
+        try
         {
-            return NotFound(new {mwssage = "Pessoa não encontrada."});
-        }
+            var result = await _personService.UpdatePersonAsync(id, personUpdateDTO);
 
-        return Ok(result);
+            if (result == null)
+            {
+                return NotFound(new {message = "Pessoa não encontrada."});
+            }
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpDelete("delete/{id}")]
