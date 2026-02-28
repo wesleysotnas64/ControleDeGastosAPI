@@ -10,6 +10,7 @@ public class CategoryController : ControllerBase
 {
     private readonly CategoryService _categoryService;
 
+    // Injeção de dependência do serviço de categoria
     public CategoryController(CategoryService categoryService)
     {
         _categoryService = categoryService;
@@ -18,16 +19,29 @@ public class CategoryController : ControllerBase
     [HttpPost("create")]
     public async Task<ActionResult<CategoryResponseDTO>> Create([FromBody] CategoryCreateDTO categoryCreateDTO)
     {
-        var result = await _categoryService.CreateCategoryAsync(categoryCreateDTO);
-
-        return CreatedAtAction(nameof(Create), new {id = result.Id }, result);
+        try
+        {
+            var result = await _categoryService.CreateCategoryAsync(categoryCreateDTO);
+            return CreatedAtAction(nameof(Create), new {id = result.Id }, result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpGet("get-all")]
     public async Task<ActionResult<List<CategoryResponseDTO>>> GetAll()
     {
-        var result = await _categoryService.GetAllCategoryAsync();
+        try
+        {
+            var result = await _categoryService.GetAllCategoryAsync();
+            return Ok(result);
 
-        return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 }

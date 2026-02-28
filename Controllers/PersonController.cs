@@ -9,6 +9,8 @@ namespace ControleDeGastosAPI.Controllers;
 public class PersonController : ControllerBase
 {
     private readonly PersonService _personService;
+
+    // Injeção de dependência do serviço de pessoa
     public PersonController(PersonService personService)
     {
         _personService = personService;
@@ -17,16 +19,30 @@ public class PersonController : ControllerBase
     [HttpPost("create")]
     public async Task<ActionResult<PersonResponseDTO>> Create([FromBody] PersonCreateDTO personCreateDTO)
     {
-        var result = await _personService.CreatePersonAsync(personCreateDTO);
+        try
+        {
+            var result = await _personService.CreatePersonAsync(personCreateDTO);
+            return CreatedAtAction(nameof(Create), new {id = result.Id}, result);
 
-        return CreatedAtAction(nameof(Create), new {id = result.Id}, result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpGet("get-all")]
     public async Task<ActionResult<List<PersonResponseDTO>>> GetAll()
     {
-        var result = await _personService.GetAllPeopleAsync();
-        return Ok(result);
+        try
+        {
+            var result = await _personService.GetAllPeopleAsync();
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpPut("update/{id}")]
@@ -52,13 +68,20 @@ public class PersonController : ControllerBase
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var result = await _personService.DeletePersonAsync(id);
-
-        if (!result)
+        try
         {
-            return NotFound(new {message = "Pessoa não encontrada."});
-        }
+            var result = await _personService.DeletePersonAsync(id);
 
-        return NoContent();
+            if (!result)
+            {
+                return NotFound(new {message = "Pessoa não encontrada."});
+            }
+
+            return NoContent();
+        } 
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 }

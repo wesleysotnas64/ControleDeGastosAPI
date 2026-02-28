@@ -12,6 +12,7 @@ public class TransactionService
 {
     private readonly ContextAPI _context;
 
+    // injeção de dependência do ContextAPI para acessar o banco de dados
     public TransactionService(ContextAPI context)
     {
         _context = context;
@@ -21,28 +22,20 @@ public class TransactionService
     {
         //Validar Pessoa e Idade
         var person = await _context.People.FindAsync(transactionCreateDTO.PersonId);
-        if (person == null)
-        {
-            throw new Exception("Pessoa não encontrada.");
-        }
+
+        if (person == null) throw new Exception("Pessoa não encontrada.");
 
         if (person.Age < 18 && transactionCreateDTO.Type != CategoryEnums.Expense)
-        {
             throw new Exception("Menores de idade só podem registrar despesas.");
-        }
-
+        
         //Validar Categoria e compatibilidade
         var category = await _context.Categories.FindAsync(transactionCreateDTO.CategoryId);
-        if (category == null)
-        {
-            throw new Exception("Categoria não encontrada.");
-        }
+        if (category == null) throw new Exception("Categoria não encontrada.");
 
         // Se a categoria não for "Ambas" (Both), ela deve ser igual ao tipo da transação.
         if (category.Purpose != CategoryEnums.Both && category.Purpose != transactionCreateDTO.Type)
-        {
-            throw new Exception($"Esta categoria é apenas para {category.Purpose} e não aceita {transactionCreateDTO.Type}.");
-        }
+            throw new Exception($"Esta categoria é apenas para {category.Purpose} e não aceita transações de {transactionCreateDTO.Type}.");
+        
 
         var transaction = new Transaction
         {
@@ -70,8 +63,8 @@ public class TransactionService
     public async Task<List<TransactionResponseDTO>> GetAllTransactionsAsync()
     {
         var transactions = await _context.Transactions
-            .Include(t => t.Person)   // "EF, faz um JOIN com a tabela de Pessoas"
-            .Include(t => t.Category) // "EF, faz um JOIN com a tabela de Categorias"
+            .Include(t => t.Person)   // "Entity Framework faz um JOIN com a tabela de Pessoas"
+            .Include(t => t.Category) // "Entity Framework faz um JOIN com a tabela de Categorias"
             .ToListAsync();
 
         return transactions.Select(t => new TransactionResponseDTO

@@ -5,10 +5,10 @@ namespace ControleDeGastosAPI.DTOs.CategoryDTO;
 
 public abstract class CategoryBaseDTO
 {
-    [Required(ErrorMessage = "Description is required")]
-    [MaxLength(400, ErrorMessage = "Description cannot exceed 400 characters")]
+    [Required(ErrorMessage = "Descrição é obrigatória.")]
+    [MaxLength(400, ErrorMessage = "Descrição não pode exceder 400 caracteres.")]
     public string Description { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Purpose is required")]
+    [Required(ErrorMessage = "Finalidade é obrigatória.")]
     public CategoryEnums Purpose { get; set; }
 }

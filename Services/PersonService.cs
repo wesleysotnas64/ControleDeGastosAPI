@@ -3,6 +3,7 @@ using ControleDeGastosAPI.DTOs.PersonDTO;
 using ControleDeGastosAPI.Entities;
 using ControleDeGastosAPI.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Immutable;
 
 namespace ControleDeGastosAPI.Services;
 
@@ -10,6 +11,7 @@ public class PersonService
 {
     private readonly ContextAPI _context;
 
+    // injeção de dependência do ContextAPI para acessar o banco de dados
     public PersonService(ContextAPI context)
     {
         _context = context;
@@ -17,6 +19,11 @@ public class PersonService
 
     public async Task<PersonResponseDTO> CreatePersonAsync(PersonCreateDTO personCreateDTO)
     {
+        // Essas validações são barradas antes da controller (DataAnnotations das Entities), mas por via das dúvidas deixei aqui também.
+        if (personCreateDTO.Name == null) throw new Exception("O nome da pessoa é obrigatório.");
+        if (personCreateDTO.Name.Length > 200 ) throw new Exception("O nome da pessoa deve ter no máximo 200 caracteres.");
+        if (personCreateDTO.Age < 0 || personCreateDTO.Age > 150) throw new Exception("A idade da pessoa deve ser entre 0 e 150 anos.");
+
         var person = new Person
         {
             Name = personCreateDTO.Name,
@@ -81,6 +88,11 @@ public class PersonService
                 throw new Exception("Não é permitido atualizar a idade para menor de 18 anos, pois a pessoa possui transações de receita.");
             }
         }
+
+        // Essas validações são barradas antes da controller (DataAnnotations das Entities), mas por via das dúvidas deixei aqui também.
+        if (personUpdateDTO.Name == null) throw new Exception("O nome da pessoa é obrigatório.");
+        if (personUpdateDTO.Name.Length > 200) throw new Exception("O nome da pessoa deve ter no máximo 200 caracteres.");
+        if (personUpdateDTO.Age < 0 || personUpdateDTO.Age > 150) throw new Exception("A idade da pessoa deve ser entre 0 e 150 anos.");
 
         person.Name = personUpdateDTO.Name;
         person.Age = personUpdateDTO.Age;

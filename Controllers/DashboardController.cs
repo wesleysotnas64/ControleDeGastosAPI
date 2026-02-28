@@ -10,6 +10,7 @@ public class DashboardController : ControllerBase
 {
     private readonly DashboardService _dashboardService;
 
+    // Injeção de dependência do serviço de dashboard
     public DashboardController(DashboardService dashboardService)
     {
         _dashboardService = dashboardService;
@@ -25,7 +26,7 @@ public class DashboardController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Erro interno ao processar o dashboard: {ex.Message}");
+            return BadRequest(new {message = ex.Message});
         }
     }
 
@@ -39,7 +40,7 @@ public class DashboardController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Erro ao processar totais por categoria: {ex.Message}");
+            return BadRequest(new {message = ex.Message});
         }
     }
 }

@@ -11,6 +11,7 @@ public class DashboardService
 {
     private readonly ContextAPI _context;
 
+    // injeção de dependência do ContextAPI para acessar o banco de dados
     public DashboardService(ContextAPI context)
     {
         _context = context;
@@ -62,6 +63,7 @@ public class DashboardService
         return summary;
     }
 
+    // Segue a mesma lógica do método anterior, mas agora para categorias
     public async Task<DashboardCategorySummaryDTO> GetCategorySummaryAsync()
     {
         // Busca todas as categorias e calcula os totais de transações para cada uma

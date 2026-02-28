@@ -9,6 +9,7 @@ namespace ControleDeGastosAPI.Services
     {
         private readonly ContextAPI _context;
 
+        // injeção de dependência do ContextAPI para acessar o banco de dados
         public CategoryService(ContextAPI context)
         {
             _context = context;
@@ -16,6 +17,10 @@ namespace ControleDeGastosAPI.Services
 
         public async Task<CategoryResponseDTO> CreateCategoryAsync(CategoryCreateDTO categoryCreateDTO)
         {
+
+            if (categoryCreateDTO.Description == null) throw new Exception("A descrição da categoria é obrigatória.");
+            if (categoryCreateDTO.Description.Length > 400) throw new Exception("A descrição da categoria deve conter no máximo 400 caracteres.");
+
             var category = new Category
             {
                 Description = categoryCreateDTO.Description,

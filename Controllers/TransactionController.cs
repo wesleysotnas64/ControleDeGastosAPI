@@ -10,6 +10,7 @@ public class TransactionController : ControllerBase
 {
     private readonly TransactionService _transactionService;
 
+    // Injeção de dependência do serviço de transação
     public TransactionController(TransactionService transactionService)
     {
         _transactionService = transactionService;
@@ -25,8 +26,6 @@ public class TransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Exceções do TransactionService => (idade < 18 ou categoria incompatível),
-            // Retorna erro 400 para o usuário.
             return BadRequest(new { message = ex.Message });
         }
 
@@ -35,7 +34,14 @@ public class TransactionController : ControllerBase
     [HttpGet("get-all")]
     public async Task<ActionResult<List<TransactionResponseDTO>>> GetAll()
     {
-        var transactions = await _transactionService.GetAllTransactionsAsync();
-        return Ok(transactions);
+        try
+        {
+            var transactions = await _transactionService.GetAllTransactionsAsync();
+            return Ok(transactions);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 }
