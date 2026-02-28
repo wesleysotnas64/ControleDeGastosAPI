@@ -6,9 +6,9 @@ Bem-vindo ao **Controle de Gastos API**! Uma solução para gestão financeira p
 
 ### 🛠️ Tecnologias e Versões
 * **Framework:** ⚡ .NET 10 (C#)
-* **Banco de Dados:** 🐘 PostgreSQL 18
+* **Banco de Dados:** 🐘 PostgreSQL 18 (Hospedado no render - Versão gratuita)
 * **Documentação:** 📑 Scalar API Reference
-* **Hospedagem:** ☁️ Render (Web Service)
+* **Hospedagem:** ☁️ Render (Web Service - Versão gratuita)
 
 ---
 
